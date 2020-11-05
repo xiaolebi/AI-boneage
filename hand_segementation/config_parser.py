@@ -1,7 +1,7 @@
 import configparser
 import io
 
-CONFIGFILE_NAME = '/Users/gejianbang/PycharmProjects/boneage/config.ini'
+CONFIGFILE_NAME = '/content/AI-boneage/config.ini'
 
 class config_parser:
     def __init__(self):
