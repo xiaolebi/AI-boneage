@@ -43,7 +43,7 @@ def train(epoch,model,optimizer,train_loader,iters):
         _,pred = torch.max(output,1)
         dice_coef = compute_dice(pred,target)
         dice_co += dice_coef
-        loss = criterion(output,target[:,:,:,0]/255)+Variable(torch.FloatTensor([10.0-10.0*dice_coef]).cuda())
+        loss = criterion(output,target[:,:,:,0]//255)+Variable(torch.FloatTensor([10.0-10.0*dice_coef]).cuda())
 #         loss = criterion(output, target[:, :, :, 0] // 255) + Variable(torch.FloatTensor([10.0 - 10.0 * dice_coef]))
         loss.backward()
         optimizer.step()
