@@ -30,7 +30,7 @@ class FocalLoss2d(nn.Module):
         # print('groundtruth\n',ground_truth)
         ground_truth = Variable(ground_truth)
         if inputs.is_cuda and not self.weight.is_cuda:
-            self.weight = self.weight.cuda
+            self.weight = self.weight.cuda()
         weight = self.weight[ids.data.view(-1)].view(batch_size,width_size,height_size)
         probs = (P*ground_truth).sum(1).view(batch_size,width_size,height_size)
         # print('probs\n',probs)
