@@ -94,7 +94,7 @@ def adjust_lr(optimizer,epoch,decay=5):
         state['lr'] *= 0.1
         for param in optimizer.param_groups:
             param['lr'] = state['lr']
-    return lr
+    return state['lr']
 
 def main():
     cfp = config_parser()
