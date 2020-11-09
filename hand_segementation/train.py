@@ -13,7 +13,7 @@ from FocalLoss2d import FocalLoss2d
 
 parser = argparse.ArgumentParser(description='BoneAge')
 parser.add_argument('--batch_size',type=int,default=6,help='input batch size for training')
-parser.add_argument('--lr',type=float,default=5e-4,help='initial learning rate')
+parser.add_argument('--lr',type=float,default=1e-3,help='initial learning rate')
 parser.add_argument('--test_batch_size',type=int,default=12,metavar='N',help='input batch size for testing')
 parser.add_argument('--start_epoch',type=int,default=0,help='start epoch')
 parser.add_argument('--epochs',type=int,default=50,metavar='N',help='number of epochs to train')
@@ -91,7 +91,7 @@ def resume(ckpt,model):
 def adjust_lr(optimizer,epoch,decay=5):
 #     lr = args.lr*(0.1**(epoch//decay))
     if epoch%5 == 0:
-        state['lr'] *= 0.1
+        state['lr'] *= 0.5
         for param in optimizer.param_groups:
             param['lr'] = state['lr']
     return state['lr']
