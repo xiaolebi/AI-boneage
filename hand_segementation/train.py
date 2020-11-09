@@ -13,7 +13,7 @@ from FocalLoss2d import FocalLoss2d
 
 parser = argparse.ArgumentParser(description='BoneAge')
 parser.add_argument('--batch_size',type=int,default=6,help='input batch size for training')
-parser.add_argument('--lr',type=float,default=5e-5,help='initial learning rate')
+parser.add_argument('--lr',type=float,default=5e-4,help='initial learning rate')
 parser.add_argument('--test_batch_size',type=int,default=12,metavar='N',help='input batch size for testing')
 parser.add_argument('--start_epoch',type=int,default=0,help='start epoch')
 parser.add_argument('--epochs',type=int,default=50,metavar='N',help='number of epochs to train')
@@ -22,6 +22,7 @@ parser.add_argument('--log_interval',type=int,default=10,metavar='N',help='how m
 parser.add_argument('--resume',type=str,default=None,help='resume training')
 
 args = parser.parse_args()
+state = {k:v for k,v in args._get_kwargs()}
 args.cuda = torch.cuda.is_available()
 if args.cuda:
     torch.cuda.manual_seed(args.seed)
@@ -88,9 +89,11 @@ def resume(ckpt,model):
         print('==> no checkpoint found at {}'.format(args.resume))
 
 def adjust_lr(optimizer,epoch,decay=5):
-    lr = args.lr*(0.1**(epoch//decay))
-    for param in optimizer.param_groups:
-        param['lr'] = lr
+#     lr = args.lr*(0.1**(epoch//decay))
+    if epoch%5 == 0:
+        state['lr'] *= 0.1
+        for param in optimizer.param_groups:
+            param['lr'] = state['lr']
     return lr
 
 def main():
