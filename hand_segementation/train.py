@@ -68,10 +68,10 @@ def compute_dice(pred,target):
     return (2*dice_count+1.0)/(dice_sum+1.0)
 
 def save_checkpoint(state,is_best,epoch,iters):
-    filename = '/content/drive/My\ Drive/boneage_dataset/checkpoint_' + str(epoch) + '_' + str(iters) +'.pth.tar'
+    filename = '/content/checkpoints/checkpoint_' + str(epoch) + '_' + str(iters) +'.pth.tar'
     torch.save(state,filename)
     if is_best:
-        shutil.copyfile(filename,'/drive/My\ Drive/boneage_dataset/model_best.pth.tar')
+        shutil.copyfile(filename,'/content/checkpoints/model_best.pth.tar')
 
 def resume(ckpt,model):
     if os.path.isfile(ckpt):
