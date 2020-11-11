@@ -83,7 +83,7 @@ def resume(ckpt,model):
         model.load_state_dict(checkpoint['state_dict'])
         optimizer = checkpoint['optimizer']
         iters = checkpoint['iters']
-        print("==> loaded checkpoint '{}' (epoch {})".format(args.resume,checkpoint['epoch']))
+        print("==> loaded checkpoint '{}'".format(args.resume))
         return model,optimizer,args.start_epoch,best_loss,iters
     else:
         print('==> no checkpoint found at {}'.format(args.resume))
