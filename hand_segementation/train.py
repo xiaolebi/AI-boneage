@@ -90,7 +90,7 @@ def resume(ckpt,model):
 
 def adjust_lr(optimizer,epoch,decay=5):
 #     lr = args.lr*(0.1**(epoch//decay))
-    if epoch%5 == 0:
+    if epoch%5 == 0 and epoch != 0:
         state['lr'] *= 0.5
         for param in optimizer.param_groups:
             param['lr'] = state['lr']
