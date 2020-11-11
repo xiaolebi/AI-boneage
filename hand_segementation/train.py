@@ -118,6 +118,7 @@ def main():
     if args.resume:
         model,optimizer,args.start_epoch,best_loss,iters = resume(args.resume,model)
         args.start_epoch = 0
+        args.lr = 1e-3
 
     for epoch in range(args.start_epoch,args.epochs):
         lr = adjust_lr(optimizer,epoch,decay=5)
