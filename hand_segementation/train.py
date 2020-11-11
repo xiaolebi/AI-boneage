@@ -78,7 +78,7 @@ def resume(ckpt,model):
     if os.path.isfile(ckpt):
         print('==> loading checkpoint {}'.format(ckpt))
         checkpoint = torch.load(ckpt)
-        args.start_epoch = checkpoint['epoch']
+        args.start_epoch = checkpoint['epochs']
         best_loss = checkpoint['loss']
         model.load_state_dict(checkpoint['state_dict'])
         optimizer = checkpoint['optimizer']
