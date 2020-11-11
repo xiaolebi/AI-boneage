@@ -19,7 +19,7 @@ parser.add_argument('--start_epoch',type=int,default=0,help='start epoch')
 parser.add_argument('--epochs',type=int,default=50,metavar='N',help='number of epochs to train')
 parser.add_argument('--seed',type=int,default=212,metavar='S',help='random seed')
 parser.add_argument('--log_interval',type=int,default=10,metavar='N',help='how many batches to wait before logging training status')
-parser.add_argument('--resume',type=str,default='/content/checkpoint/resume/model_best.pth_4.tar',help='resume training')
+parser.add_argument('--resume',type=str,default='/content/checkpoints/resume/model_best.pth_4.tar',help='resume training')
 
 args = parser.parse_args()
 state = {k:v for k,v in args._get_kwargs()}
