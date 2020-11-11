@@ -19,7 +19,7 @@ parser.add_argument('--start_epoch',type=int,default=0,help='start epoch')
 parser.add_argument('--epochs',type=int,default=50,metavar='N',help='number of epochs to train')
 parser.add_argument('--seed',type=int,default=212,metavar='S',help='random seed')
 parser.add_argument('--log_interval',type=int,default=10,metavar='N',help='how many batches to wait before logging training status')
-parser.add_argument('--resume',type=str,default='/content/checkpoints/resume/model_best.pth_4.tar',help='resume training')
+parser.add_argument('--resume',type=str,default=None,help='resume training')
 
 args = parser.parse_args()
 state = {k:v for k,v in args._get_kwargs()}
@@ -48,13 +48,13 @@ def train(epoch,model,optimizer,train_loader,iters):
 #         loss = criterion(output, target[:, :, :, 0] // 255) + Variable(torch.FloatTensor([10.0 - 10.0 * dice_coef]))
         loss.backward()
         optimizer.step()
-        count += torch.sum(pred.data[0,:,:] == (target.data[0,:,:,0]//255))
+        count += torch.sum(pred.data[:,:,:] == (target.data[:,:,:,0]//255))
         if batch_idx % args.log_interval == 0 and not batch_idx == 0:
             print("Train  batch [{}/{} ({:.0f}%)]  Loss:{:.4f}  acc:{:.2f}%  ave dice coef:{:.4f}".format(
                 # epoch,args.epochs,
                 batch_idx*len(data),len(train_loader.dataset),
                 100.0*batch_idx / len(train_loader),loss.data[0],
-                100.0*count / args.log_interval / torch.numel(target.data[0,:,:,0]),
+                100.0*count / args.log_interval / torch.numel(target.data[:,:,:,0]),
                 dice_co/args.log_interval
             ))
             iters += 1
@@ -64,8 +64,8 @@ def train(epoch,model,optimizer,train_loader,iters):
 
 
 def compute_dice(pred,target):
-    dice_count = torch.sum(pred.data[0,:,:].type(torch.ByteTensor)&target.data[0,:,:,0].type(torch.ByteTensor)//255)
-    dice_sum = (1.0/255*torch.sum(target.data[0,:,:,0].type(torch.ByteTensor))+1.0*torch.sum(pred.data[0,:,:].type(torch.ByteTensor)))
+    dice_count = torch.sum(pred.data[:,:,:].type(torch.ByteTensor)&target.data[:,:,:,0].type(torch.ByteTensor)//255)
+    dice_sum = (1.0/255*torch.sum(target.data[:,:,:,0].type(torch.ByteTensor))+1.0*torch.sum(pred.data[:,:,:].type(torch.ByteTensor)))
     return (2*dice_count+1.0)/(dice_sum+1.0)
 
 def save_checkpoint(state,is_best,epoch,iters):
