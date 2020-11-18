@@ -19,7 +19,7 @@ parser.add_argument('--start_epoch',type=int,default=0,help='start epoch')
 parser.add_argument('--epochs',type=int,default=50,metavar='N',help='number of epochs to train')
 parser.add_argument('--seed',type=int,default=212,metavar='S',help='random seed')
 parser.add_argument('--log_interval',type=int,default=10,metavar='N',help='how many batches to wait before logging training status')
-parser.add_argument('--resume',type=str,default=None,help='resume training')
+parser.add_argument('--resume',type=str,default='/content/checkpoints/resume/model_best.pth_full_hand.tar',help='resume training')
 
 args = parser.parse_args()
 state = {k:v for k,v in args._get_kwargs()}
@@ -90,7 +90,7 @@ def resume(ckpt,model):
 
 def adjust_lr(optimizer,epoch,decay=5):
 #     lr = args.lr*(0.1**(epoch//decay))
-    if epoch%5 == 0 and epoch != 0:
+    if epoch%10 == 0 and epoch != 0:
         state['lr'] *= 0.5
         for param in optimizer.param_groups:
             param['lr'] = state['lr']
@@ -118,7 +118,7 @@ def main():
     if args.resume:
         model,optimizer,args.start_epoch,best_loss,iters = resume(args.resume,model)
         args.start_epoch = 0
-        args.lr = 1e-3
+        args.lr = 1e-5
 
     for epoch in range(args.start_epoch,args.epochs):
         lr = adjust_lr(optimizer,epoch,decay=5)
