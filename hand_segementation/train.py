@@ -13,13 +13,13 @@ from FocalLoss2d import FocalLoss2d
 
 parser = argparse.ArgumentParser(description='BoneAge')
 parser.add_argument('--batch_size',type=int,default=6,help='input batch size for training')
-parser.add_argument('--lr',type=float,default=1e-5,help='initial learning rate')
+parser.add_argument('--lr',type=float,default=1e-3,help='initial learning rate')
 parser.add_argument('--test_batch_size',type=int,default=12,metavar='N',help='input batch size for testing')
 parser.add_argument('--start_epoch',type=int,default=0,help='start epoch')
 parser.add_argument('--epochs',type=int,default=50,metavar='N',help='number of epochs to train')
 parser.add_argument('--seed',type=int,default=212,metavar='S',help='random seed')
 parser.add_argument('--log_interval',type=int,default=10,metavar='N',help='how many batches to wait before logging training status')
-parser.add_argument('--resume',type=str,default='/content/checkpoints/resume/model_best.pth_full_hand.tar',help='resume training')
+parser.add_argument('--resume',type=str,default=None,help='resume training')
 
 args = parser.parse_args()
 state = {k:v for k,v in args._get_kwargs()}
