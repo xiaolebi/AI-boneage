@@ -69,7 +69,7 @@ def compute_dice(pred,target):
     return (2*dice_count+1.0)/(dice_sum+1.0)
 
 def save_checkpoint(state,is_best,epoch,iters):
-    filename = '/content/checkpoints/checkpoint_' + str(epoch) + '_' + str(iters) +'.pth.tar'
+    filename = '/content/checkpoints/20201118/checkpoint_' + str(epoch) + '_' + str(iters) +'.pth.tar'
     torch.save(state,filename)
     if is_best:
         shutil.copyfile(filename,'/content/checkpoints/model_best.pth.tar')
