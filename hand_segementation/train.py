@@ -69,10 +69,10 @@ def compute_dice(pred,target):
     return (2*dice_count+1.0)/(dice_sum+1.0)
 
 def save_checkpoint(state,is_best,epoch,iters):
-    filename = '/content/checkpoints/checkpoint_' + str(epoch) + '_' + str(iters) +'.pth.tar'
+    filename = '/content/checkpoints/20201119/checkpoint_' + str(epoch) + '_' + str(iters) +'.pth.tar'
     torch.save(state,filename)
     if is_best:
-        shutil.copyfile(filename,'/content/checkpoints/model_best.pth.tar')
+        shutil.copyfile(filename,'/content/checkpoints/20201119/model_best.pth.tar')
 
 def resume(ckpt,model):
     if os.path.isfile(ckpt):
@@ -118,7 +118,7 @@ def main():
     if args.resume:
         model,optimizer,args.start_epoch,best_loss,iters = resume(args.resume,model)
         args.start_epoch = 0
-        args.lr = 1e-5
+        args.lr = 1e-3
 
     for epoch in range(args.start_epoch,args.epochs):
         lr = adjust_lr(optimizer,epoch,decay=5)
