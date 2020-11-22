@@ -180,8 +180,8 @@ def test(testloader,model,criterion,epoch,use_cuda):
             inputs,targets = inputs.cuda(),targets.cuda()
         inputs,targets = torch.autograd.Variable(inputs),torch.autograd.Variable(targets)
         outputs = model(inputs)
-        loss = criterion(outputs,targets)
-        losses.update(loss.data[0],inputs.size(0))
+        loss = criterion(outputs,targets[:,:,0])
+        losses.update(loss.item(),inputs.size(0))
         batch_time.update(time.time()-end)
         end = time.time()
         print('Train:({batch}/{size}) Data:{data:.3f}s | Batch:{bt:.3f}s | Loss:{loss:.4f}'.format(
