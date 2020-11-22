@@ -29,7 +29,7 @@ parser.add_argument('--gamma',type=float,default=0.1,help='LR is multiplied by g
 parser.add_argument('--momentum',default=0.9,type=float,metavar='M',help='momentum')
 parser.add_argument('--weight_decay','--wd',default=5e-4,type=float,metavar='W',help='weight decay (default: 1e-4)')
 parser.add_argument('--panelty','--pl',default=1e-3,type=float)
-parser.add_argument('--checkpoint',default='./checkpoint',type=str,metavar='PATH',help='path to save checkpoint(default:checkpoint)')
+parser.add_argument('--checkpoint',default='/content/checkpoints',type=str,metavar='PATH',help='path to save checkpoint(default:checkpoint)')
 parser.add_argument('--resume',default='',type=str,metavar='PATH',help='path to latest checkpoint(default:None)')
 parser.add_argument('--depth',type=int,default=104,help='Model depth')
 parser.add_argument('--cardinality',type=int,default=8,help='Model cardinality(group)')
@@ -72,9 +72,9 @@ def main():
         Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
     ])
 
-    trainset = HandLandmarksDataset(csv_file='../RSNA_boneage_dataset/landmarks_detection/train.csv',transform=transform_train,root_dir='../RSNA_boneage_dataset/landmarks_detection/train')
+    trainset = HandLandmarksDataset(csv_file='/content/dataset/train.csv',transform=transform_train,root_dir='/content/dataset/train')
     trainloader = data.DataLoader(trainset,batch_size=args.train_batch,shuffle=True,num_workers=args.workers)
-    testset = HandLandmarksDataset(csv_file='../RSNA_boneage_dataset/landmarks_detection/test.csv',transform=transform_test,root_dir='../RSNA_boneage_dataset/landmarks_detection/test')
+    testset = HandLandmarksDataset(csv_file='/content/dataset/test.csv',transform=transform_test,root_dir='/content/dataset/test')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
     model = Res152(6)
     cudnn.benchmark = True
