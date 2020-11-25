@@ -59,9 +59,10 @@ def main():
         mkdir_p(args.checkpoint)
     print("==> Preparing dataset %s"%args.dataset)
     transform_train = transforms.Compose([
-        Rescale((530,530)),
+        Rescale((520,520)),
         RandomCrop((512,512)),
         RandomFlip(),
+        RotateRandom(),
         # RandomBrightness(),
         ToTensor(512),
         Normalize([0.485,0.456,0.406],[0.229,0.224,0.225]),
@@ -112,16 +113,15 @@ def main():
     for epoch in range(start_epoch,args.epochs):
         adjust_learning_rate(optimizer,epoch)
         print('\nEpoch: [%d | %d] LR: %f'%(epoch+1,args.epochs,state['lr']))
-        train_loss,train_acc = train(trainloader,model,criterion,optimizer,epoch,use_cuda)
-        test_loss,test_acc = test(testloader,model,criterion,start_epoch,use_cuda)
-        print('train_loss:%s test_loss:%s trian_acc:%s test_acc:%s'%(train_loss,test_loss,train_acc,test_acc))
+        train_loss = train(trainloader,model,criterion,optimizer,epoch,use_cuda)
+        test_loss = test(testloader,model,criterion,start_epoch,use_cuda)
+        print('train_loss:%s   test_loss:%s'%(train_loss,test_loss))
         is_best = test_loss<best_acc
         best_acc = min(test_loss,best_acc)
         if epoch%10 == 0:
             save_checkpoint({
                 'epoch':epoch+1,
                 'state_dict':model.state_dict(),
-                'acc':test_acc,
                 'best_acc':best_acc,
                 'optimizer':optimizer.state_dict(),
             },is_best,checkpoint=args.checkpoint,filename=title+'_'+str(epoch)+'.pth.tar')
@@ -163,7 +163,7 @@ def train(trainloader,model,criterion,optimizer,epoch,use_cuda):
             bt = batch_time.avg,
             loss = losses.avg,
         ))
-    return (losses.avg,0)
+    return losses.avg
 
 def test(testloader,model,criterion,epoch,use_cuda):
     global best_acc
@@ -191,7 +191,7 @@ def test(testloader,model,criterion,epoch,use_cuda):
             bt=batch_time.avg,
             loss=losses.avg
         ))
-    return (losses.avg, 0)
+    return losses.avg
 
 def save_checkpoint(state,is_best,checkpoint='checkpoint',filename='checkpoint.pth.tar'):
     filepath = os.path.join(checkpoint,filename)
