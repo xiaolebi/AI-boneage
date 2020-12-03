@@ -40,6 +40,7 @@ parser.add_argument('--manualSeed',type=int,help='manual seed')
 parser.add_argument('--e','--evaluate',dest='evaluate',action='store_true',help='evaluate model on validation set')
 parser.add_argument('--gpu_id',default='0',type=str,help='id for CUDA_VISIBLE_DEVICES')
 
+torch.cuda.empty_cache()
 args = parser.parse_args()
 state = {k:v for k,v in args._get_kwargs()}
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_id
