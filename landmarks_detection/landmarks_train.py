@@ -73,7 +73,7 @@ def main():
         Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
     ])
 
-    trainset = HandLandmarksDataset(csv_file='/content/dataset/train.csv',transform=transform_train,root_dir='/content/dataset/train')
+    trainset = HandLandmarksDataset(csv_file='/content/dataset/retrain.csv',transform=transform_train,root_dir='/content/dataset/train')
     trainloader = data.DataLoader(trainset,batch_size=args.train_batch,shuffle=True,num_workers=args.workers)
     testset = HandLandmarksDataset(csv_file='/content/dataset/test.csv',transform=transform_test,root_dir='/content/dataset/test')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
