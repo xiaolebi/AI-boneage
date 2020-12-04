@@ -152,8 +152,8 @@ def train(trainloader,model,criterion,optimizer,epoch,use_cuda):
         for w model.parameters():
             l2_reg = l2_reg + torch.pow(w,2).sum()
         '''
-        # l2_reg = Variable(torch.cuda.FloatTensor(1),requires_grad=True)
-        l2_reg = Variable(torch.FloatTensor(1), requires_grad=True)
+        l2_reg = Variable(torch.cuda.FloatTensor(1),requires_grad=True)
+        #l2_reg = Variable(torch.FloatTensor(1), requires_grad=True)
         for W in model.parameters():
             l2_reg = l2_reg + torch.pow(W,2).sum()
         loss = loss + args.panelty*l2_reg
