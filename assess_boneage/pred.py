@@ -43,8 +43,8 @@ def pre_bone_age(model,img,gender,out_size):
 
 if __name__ == '__main__':
     checkpoint = '/content/checkpoints/resume/model_best.pth.tar'
-    test_path = '/content/dataset/test'
-    test_csv = '/content/dataset/test.csv'
+    test_path = '/content/dataset/valid'
+    test_csv = '/content/dataset/valid.csv'
     model = load_model(checkpoint)
     reader = csv.reader(open(test_csv))
     landmarks_frame = [[row[0],np.float64(row[1]),row[2]] for i,row in enumerate(reader) if i > 0]
@@ -78,4 +78,4 @@ if __name__ == '__main__':
     print('Difference greater than 20',num)
     print('Difference greater than 12', num_12)
     print('Difference greater than 6', num_6)
-    df_data.to_csv('/content/dataset/test_result.csv',index=False)
+    df_data.to_csv('/content/dataset/valid_result.csv',index=False)
