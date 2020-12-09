@@ -9,6 +9,7 @@ import pandas as pd
 import os
 mean = np.asarray([0.4465,0.4822,0.4914])
 std = np.asarray([0.1994,0.1994,0.2023])
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 def load_model(checkpoint_path):
     model = BoneAge(1)
