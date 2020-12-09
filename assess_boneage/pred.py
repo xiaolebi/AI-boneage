@@ -13,6 +13,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 def load_model(checkpoint_path):
     model = BoneAge(1)
+    print('========loading model==========')
     model = torch.nn.DataParallel(model).cuda()
     checkpoint = torch.load(checkpoint_path)
     state_dict = checkpoint['state_dict']
@@ -21,6 +22,7 @@ def load_model(checkpoint_path):
         name = k[0:]
         new_state_dict[name] = v
     model.load_state_dict(new_state_dict)
+    print('========model loaded==========')
     return model.eval()
 
 def pre_bone_age(model,img,gender,out_size):
