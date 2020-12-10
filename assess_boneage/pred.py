@@ -27,8 +27,8 @@ def load_model(checkpoint_path):
 
 def pre_bone_age(model,img,gender,out_size):
     # img = cv2.resize(img,(out_size,out_size))
-    # img = np.dot(img[...,:3],[0.299,0.587,0.114])
-    # img = normalize(img,True,0.05)
+    img = np.dot(img[...,:3],[0.299,0.587,0.114])
+    img = normalize(img,True,0.05)
     # img[img>4.5] = 4.5
     img = np.repeat(img[:,:,np.newaxis],3,axis=2)
     img = img.transpose((2,0,1))
@@ -61,7 +61,7 @@ if __name__ == '__main__':
         gender = np.array([1,])
         if gender_s == 'False':
             gender = np.array([0,])
-        img = cv2.imread(img_path,cv2.COLOR_BGR2BGRA)
+        img = cv2.imread(img_path)
         age = pre_bone_age(model,img,gender,512)
         df_data.loc[df_data.id == int(landmarks_frame[j][0]),'AI boneage'] = age
         if abs(float(r_age)-round(age)) > 20 :
