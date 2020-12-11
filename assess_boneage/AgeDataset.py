@@ -17,7 +17,7 @@ class AgeDataset(Dataset):
         self.rgb = rgb
 
     def __len__(self):
-        return len(self.landmarks_frame)
+        return len(self.landmarks_frame)-1
 
     def __getitem__(self, idx):
         img_name = os.path.join(self.root_dir,self.landmarks_frame[idx][0] + '.png')
