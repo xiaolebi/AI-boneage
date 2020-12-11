@@ -79,7 +79,7 @@ def main():
     model = BoneAge(1)
     model.apply(weights_init)
     cudnn.benchmark = True
-#     print('   Total params: %.2fM'%(sum(p.numel() for p in model.parameters())/1000000.0))
+    print('   Total params: %.2fM'%(sum(p.numel() for p in model.parameters())/1000000.0))
     criterion = nn.SmoothL1Loss().cuda()
     ignored_params = []
     base_params = filter(lambda p:id(p) not in ignored_params,model.parameters())
