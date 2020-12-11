@@ -17,30 +17,27 @@ class AgeDataset(Dataset):
         self.rgb = rgb
 
     def __len__(self):
-        return len(self.landmarks_frame)-1
+        return len(self.landmarks_frame)
 
     def __getitem__(self, idx):
         img_name = os.path.join(self.root_dir,self.landmarks_frame[idx][0] + '.png')
-        image = cv2.imread(img_name)
-        if type(image) != None:    
-            if self.rgb:
-                image = np.dot(image[...,:3],[0.299,0.587,0.114])
-            image = normalize(image,True,0.05)
-            # image[image > 4.5] = 4.5
-            image = np.repeat(image[:,:,np.newaxis],3,axis=2)
-            landmarks = self.landmarks_frame[idx][1]
-            gender_s = self.landmarks_frame[idx][2]
-            gender = np.array([1,])
-            if gender_s == 'False':
-                gender = np.array([0,])
-            sample = {'image':image,'landmarks':landmarks}
-            if self.transform:
-                sample = self.transform(sample)
-            gender = torch.from_numpy(gender).float()
-            sample['gender'] = gender
-            return sample
-        else:
-            pass
+        image = cv2.imread(img_name) 
+        if self.rgb:
+            image = np.dot(image[...,:3],[0.299,0.587,0.114])
+        image = normalize(image,True,0.05)
+        # image[image > 4.5] = 4.5
+        image = np.repeat(image[:,:,np.newaxis],3,axis=2)
+        landmarks = self.landmarks_frame[idx][1]
+        gender_s = self.landmarks_frame[idx][2]
+        gender = np.array([1,])
+        if gender_s == 'False':
+            gender = np.array([0,])
+        sample = {'image':image,'landmarks':landmarks}
+        if self.transform:
+            sample = self.transform(sample)
+        gender = torch.from_numpy(gender).float()
+        sample['gender'] = gender
+        return sample
 
 def normalize(input,crop=False,crop_val=0.5):
     if crop:
