@@ -72,14 +72,14 @@ def main():
         ToTensor(512)
     ])
 
-    trainset = AgeDataset(csv_file="/content/drive/My Drive/boneage_dataset/assess_boneage/train.csv",transform=transform_train,root_dir='/content/dataset/train')
+    trainset = AgeDataset(csv_file="/content/dataset/train.csv",transform=transform_train,root_dir='/content/dataset/train')
     trainloader = data.DataLoader(trainset,batch_size=args.train_batch,shuffle=True,num_workers=args.workers)
     testset = AgeDataset(csv_file='/content/dataset/valid.csv',transform=transform_test,root_dir='/content/dataset/valid')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
     model = BoneAge(1)
     model.apply(weights_init)
     cudnn.benchmark = True
-    print('   Total params: %.2fM'%(sum(p.numel() for p in model.parameters())/1000000.0))
+#     print('   Total params: %.2fM'%(sum(p.numel() for p in model.parameters())/1000000.0))
     criterion = nn.SmoothL1Loss().cuda()
     ignored_params = []
     base_params = filter(lambda p:id(p) not in ignored_params,model.parameters())
