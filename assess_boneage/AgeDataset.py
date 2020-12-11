@@ -21,7 +21,7 @@ class AgeDataset(Dataset):
 
     def __getitem__(self, idx):
         img_name = os.path.join(self.root_dir,self.landmarks_frame[idx][0] + '.png')
-        image = cv2.imread(img_name,cv2.COLOR_BGR2BGRA)
+        image = cv2.imread(img_name)
         if self.rgb:
             image = np.dot(image[...,:3],[0.299,0.587,0.114])
         image = normalize(image,True,0.05)
