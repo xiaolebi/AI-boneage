@@ -159,6 +159,7 @@ def train(trainloader,model,criterion,optimizer,epoch,use_cuda):
         loss = loss + args.panelty*l2_reg
         losses.update(loss.item(),inputs.size(0))
         optimizer.zero_grad()
+        print("batch:{} train loss:{}".format(batch_idx,loss)) 
         loss.backward()
         optimizer.step()
         batch_time.update(time.time()-end)
@@ -190,6 +191,7 @@ def test(testloader,model,criterion,epoch,use_cuda):
         outputs = model(inputs,gender)
         loss = criterion(outputs,targets)
         losses.update(loss.item(),inputs.size(0))
+        print("batch:{} test loss:{}".format(batch_idx,loss))
         batch_time.update(time.time()-end)
         end = time.time()
         # print('Test:({batch}/{size}) Data:{data:.3f}s | Batch:{bt:.3f}s | Loss:{loss:.4f}'.format(
