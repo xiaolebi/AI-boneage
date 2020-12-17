@@ -42,7 +42,7 @@ def pre_bone_age(model,img,gender,out_size):
     return output[0,0]
 
 if __name__ == '__main__':
-    checkpoint = '/content/checkpoints/resume/model_best.pth.tar'
+    checkpoint = '/content/checkpoints/Assess_BoneAge_InceptionV3_99.pth.tar'
     test_path = '/content/dataset/valid'
     test_csv = '/content/dataset/valid.csv'
     model = load_model(checkpoint)
