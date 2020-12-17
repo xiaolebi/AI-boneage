@@ -32,7 +32,7 @@ parser.add_argument('--momentum',default=0.9,type=float,metavar='M',help='moment
 parser.add_argument('--weight_decay','--wd',default=1e-4,type=float,metavar='W',help='weight decay (default: 1e-4)')
 parser.add_argument('--panelty','--pl',default=1e-4,type=float)
 parser.add_argument('--checkpoint',default='/content/checkpoints',type=str,metavar='PATH',help='path to save checkpoint(default:checkpoint)')
-parser.add_argument('--resume',default='/content/checkpoints/resume/Assess_BoneAge_InceptionV3_64.pth.tar',type=str,metavar='PATH',help='path to latest checkpoint(default:None)')
+parser.add_argument('--resume',default='/content/checkpoints/Assess_BoneAge_InceptionV3_79.pth.tar',type=str,metavar='PATH',help='path to latest checkpoint(default:None)')
 parser.add_argument('--depth',type=int,default=104,help='Model depth')
 parser.add_argument('--cardinality',type=int,default=8,help='Model cardinality(group)')
 parser.add_argument('--widen_factor',type=int,default=4,help='Widen factor 4 -> 64,8 -> 128')
