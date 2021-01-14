@@ -28,7 +28,7 @@ class AgeDataset(Dataset):
             image = normalize(image,True,0.05)
         else:
             image = np.zeros((512,512))
-        # image[image > 4.5] = 4.5
+        image[image > 4.5] = 4.5
         image = np.repeat(image[:,:,np.newaxis],3,axis=2)
         landmarks = self.landmarks_frame[idx][1]
         gender_s = self.landmarks_frame[idx][2]
