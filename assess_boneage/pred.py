@@ -26,10 +26,10 @@ def load_model(checkpoint_path):
     return model.eval()
 
 def pre_bone_age(model,img,gender,out_size):
-    # img = cv2.resize(img,(out_size,out_size))
+    img = cv2.resize(img,(out_size,out_size))
     img = np.dot(img[...,:3],[0.299,0.587,0.114])
     img = normalize(img,True,0.05)
-    # img[img>4.5] = 4.5
+    img[img>4.5] = 4.5
     img = np.repeat(img[:,:,np.newaxis],3,axis=2)
     img = img.transpose((2,0,1))
     img = img[np.newaxis,...]
@@ -42,7 +42,7 @@ def pre_bone_age(model,img,gender,out_size):
     return output[0,0]
 
 if __name__ == '__main__':
-    checkpoint = '/content/checkpoints/model_best.pth.tar'
+    checkpoint = '/content/checkpoints/resume/model_best.pth.tar'
     test_path = '/content/dataset/valid'
     test_csv = '/content/dataset/valid.csv'
     model = load_model(checkpoint)
