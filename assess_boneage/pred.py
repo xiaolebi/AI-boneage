@@ -78,4 +78,4 @@ if __name__ == '__main__':
     print('Difference greater than 20',num)
     print('Difference greater than 12', num_12)
     print('Difference greater than 6', num_6)
-    df_data.to_csv('/content/dataset/valid_result.csv',index=False)
+    df_data.to_csv('/content/dataset/valid_result_0114.csv',index=False)
