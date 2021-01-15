@@ -28,7 +28,7 @@ parser.add_argument('--train_batch',default=32,type=int,metavar='N',help='train 
 parser.add_argument('--test_batch',default=8,type=int,metavar='N',help='test batch size')
 parser.add_argument('--lr','--learning-rate',default=0.001,type=float,metavar='LR',help='initial learning rate') #0.000063
 parser.add_argument('--drop','--dropout',default=0,type=float,metavar='Dropout',help='Dropout ratio')
-parser.add_argument('--schedule',type=int,nargs='+',default=[5,10,20,30,50,70],help='Decrease learning rate at these epochs')
+parser.add_argument('--schedule',type=int,nargs='+',default=[1,2,5,10,20,30,50,70],help='Decrease learning rate at these epochs')
 parser.add_argument('--gamma',type=float,default=0.5,help='LR is multiplied by gamma on schedule')
 parser.add_argument('--momentum',default=0.9,type=float,metavar='M',help='momentum')
 parser.add_argument('--weight_decay','--wd',default=1e-4,type=float,metavar='W',help='weight decay (default: 1e-4)')
