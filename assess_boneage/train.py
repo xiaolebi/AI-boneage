@@ -1,3 +1,5 @@
+#修改注意：lr、checkpoints、resume、loggerpath、model_best path
+
 from __future__ import print_function
 import argparse
 import os
