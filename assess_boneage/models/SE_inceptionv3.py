@@ -1,4 +1,5 @@
 from .se_module import SELayer
+from .da_att import PAM_Module,CAM_Module
 from torchsummary import summary
 from torchvision.models.inception import Inception3
 import torch
@@ -70,7 +71,10 @@ class Inception3(nn.Module):
         self.Mixed_7c = nn.Sequential(
             InceptionE(2048),
             SELayer(2048))
-
+           
+        self.PAM = PAM_Module(2048)
+        self.CAM = CAM_Module(2048)
+        
         self.fc = nn.Linear(2048,num_classes)
 
         for m in self.modules():
@@ -126,6 +130,11 @@ class Inception3(nn.Module):
         # to the spatial aggregation."""
         x = self.Mixed_7b(x)
         x = self.Mixed_7c(x)
+        
+        x1 = self.PAM(x)
+        x2 = self.CAM(x)
+        x = x1 + x2
+        
         x = F.avg_pool2d(x,kernel_size=7)
 
         x = x.view(x.size(0), -1)
