@@ -220,7 +220,7 @@ def save_checkpoint(state,is_best,checkpoint='checkpoint',filename='checkpoint.p
     filepath = os.path.join(checkpoint,filename)
     torch.save(state,filepath)
     if is_best:
-        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0127",'model_best.pth.tar'))
+        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0128",'model_best.pth.tar'))
 
 def adjust_learning_rate(optimizer,epoch):
     global state
