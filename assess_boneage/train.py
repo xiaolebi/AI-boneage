@@ -129,7 +129,7 @@ def main():
     for epoch in range(start_epoch,args.epochs):
 #         adjust_learning_rate(optimizer,epoch)
         print('\nEpoch: [%d | %d] LR: %f'%(epoch+1,args.epochs,state['lr']))
-        train_loss,trian_acc = train(trainloader,model,criterion,optimizer,epoch,use_cuda)
+        train_loss,trian_acc = train(trainloader,model,criterion,optimizer,epoch,use_cuda,scheduler)
         test_loss,test_acc = test(testloader,model,criterion,start_epoch,use_cuda)
         print('\nLR:%f train_loss:%s trian_acc:%s test_loss:%s test_acc:%s' %(state['lr'],train_loss,trian_acc,test_loss,test_acc))
         is_best = test_loss<best_acc
@@ -147,7 +147,7 @@ def main():
     print('Best acc')
     print(best_acc)
 
-def train(trainloader,model,criterion,optimizer,epoch,use_cuda):
+def train(trainloader,model,criterion,optimizer,epoch,use_cuda,scheduler):
     model.train()
     batch_time = AverageMeter()
     data_time = AverageMeter()
