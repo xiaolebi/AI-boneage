@@ -15,6 +15,7 @@ import torch.backends.cudnn as cudnn
 import torch.optim as optim
 import torch.utils.data as data
 import torchvision.transforms as transforms
+import torch.optim.lr_scheduler as lr_scheduler
 from torch.autograd import Variable
 from models import *
 from AgeDataset import *
@@ -103,9 +104,11 @@ def main():
     params = [
         {'params':base_params,'lr':args.lr  }
     ]
+    
     model = torch.nn.DataParallel(model).cuda()
     optimizer = optim.Adam(params=params,lr=args.lr,weight_decay=args.weight_decay)
-
+    scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
+    
     title = 'Assess_BoneAge_InceptionV3'
     if args.resume:
         print('==> Resume from checkpoint...')
@@ -124,7 +127,7 @@ def main():
         return
 
     for epoch in range(start_epoch,args.epochs):
-        adjust_learning_rate(optimizer,epoch)
+#         adjust_learning_rate(optimizer,epoch)
         print('\nEpoch: [%d | %d] LR: %f'%(epoch+1,args.epochs,state['lr']))
         train_loss,trian_acc = train(trainloader,model,criterion,optimizer,epoch,use_cuda)
         test_loss,test_acc = test(testloader,model,criterion,start_epoch,use_cuda)
@@ -174,7 +177,9 @@ def train(trainloader,model,criterion,optimizer,epoch,use_cuda):
         optimizer.zero_grad()
         print("batch:{} train loss:{}".format(batch_idx,losses.avg)) 
         loss.backward()
+        scheduler.step(loss)
         optimizer.step()
+        state['lr'] = optimizer.param_groups[0]['lr']
         batch_time.update(time.time()-end)
         end = time.time()
         # print('Train:({batch}/{size}) Data:{data:.3f}s | Batch:{bt:.3f}s | Loss:{loss:.4f}'.format(
