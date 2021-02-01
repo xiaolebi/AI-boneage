@@ -129,7 +129,9 @@ def main():
     for epoch in range(start_epoch,args.epochs):
 #         adjust_learning_rate(optimizer,epoch)
         print('\nEpoch: [%d | %d] LR: %f'%(epoch+1,args.epochs,state['lr']))
-        train_loss,trian_acc = train(trainloader,model,criterion,optimizer,epoch,use_cuda,scheduler)
+        train_loss,trian_acc = train(trainloader,model,criterion,optimizer,epoch,use_cuda)
+        scheduler.step(train_loss)
+        state['lr'] = optimizer.param_groups[0]['lr']
         test_loss,test_acc = test(testloader,model,criterion,start_epoch,use_cuda)
         print('\nLR:%f train_loss:%s trian_acc:%s test_loss:%s test_acc:%s' %(state['lr'],train_loss,trian_acc,test_loss,test_acc))
         is_best = test_loss<best_acc
@@ -147,7 +149,7 @@ def main():
     print('Best acc')
     print(best_acc)
 
-def train(trainloader,model,criterion,optimizer,epoch,use_cuda,scheduler):
+def train(trainloader,model,criterion,optimizer,epoch,use_cuda):
     model.train()
     batch_time = AverageMeter()
     data_time = AverageMeter()
@@ -177,9 +179,7 @@ def train(trainloader,model,criterion,optimizer,epoch,use_cuda,scheduler):
         optimizer.zero_grad()
         print("batch:{} train loss:{}".format(batch_idx,losses.avg)) 
         loss.backward()
-        scheduler.step(loss)
         optimizer.step()
-        state['lr'] = optimizer.param_groups[0]['lr']
         batch_time.update(time.time()-end)
         end = time.time()
         # print('Train:({batch}/{size}) Data:{data:.3f}s | Batch:{bt:.3f}s | Loss:{loss:.4f}'.format(
