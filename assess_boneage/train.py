@@ -31,7 +31,7 @@ parser.add_argument('--train_batch',default=16,type=int,metavar='N',help='train 
 parser.add_argument('--test_batch',default=3,type=int,metavar='N',help='test batch size')
 parser.add_argument('--lr','--learning-rate',default=0.001,type=float,metavar='LR',help='initial learning rate') #0.000063
 parser.add_argument('--drop','--dropout',default=0,type=float,metavar='Dropout',help='Dropout ratio')
-parser.add_argument('--schedule',type=int,nargs='+',default=[5,10,20,30,50,70],help='Decrease learning rate at these epochs')
+parser.add_argument('--schedule',type=int,nargs='+',default=[4,8,16,32,64,100],help='Decrease learning rate at these epochs')
 parser.add_argument('--gamma',type=float,default=0.1,help='LR is multiplied by gamma on schedule')
 parser.add_argument('--momentum',default=0.9,type=float,metavar='M',help='momentum')
 parser.add_argument('--weight_decay','--wd',default=1e-4,type=float,metavar='W',help='weight decay (default: 1e-4)')
@@ -60,7 +60,7 @@ if use_cuda:
 best_acc = 999
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0201/20210201_16batch.log')
+handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0203/20210203_16batch.log')
 fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
@@ -107,7 +107,7 @@ def main():
     
     model = torch.nn.DataParallel(model).cuda()
     optimizer = optim.Adam(params=params,lr=args.lr,weight_decay=args.weight_decay)
-    scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
+#     scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
     
     title = 'Assess_BoneAge_InceptionV3'
     if args.resume:
@@ -127,11 +127,11 @@ def main():
         return
 
     for epoch in range(start_epoch,args.epochs):
-#         adjust_learning_rate(optimizer,epoch)
+        adjust_learning_rate(optimizer,epoch)
         print('\nEpoch: [%d | %d] LR: %f'%(epoch+1,args.epochs,state['lr']))
         train_loss,trian_acc = train(trainloader,model,criterion,optimizer,epoch,use_cuda)
-        scheduler.step(train_loss)
-        state['lr'] = optimizer.param_groups[0]['lr']
+#         scheduler.step(train_loss)
+#         state['lr'] = optimizer.param_groups[0]['lr']
         test_loss,test_acc = test(testloader,model,criterion,start_epoch,use_cuda)
         print('\nLR:%f train_loss:%s trian_acc:%s test_loss:%s test_acc:%s' %(state['lr'],train_loss,trian_acc,test_loss,test_acc))
         is_best = test_loss<best_acc
@@ -225,7 +225,7 @@ def save_checkpoint(state,is_best,checkpoint='checkpoint',filename='checkpoint.p
     filepath = os.path.join(checkpoint,filename)
     torch.save(state,filepath)
     if is_best:
-        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0201",'model_best.pth.tar'))
+        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0203",'model_best.pth.tar'))
 
 def adjust_learning_rate(optimizer,epoch):
     global state
