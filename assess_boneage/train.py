@@ -60,7 +60,7 @@ if use_cuda:
 best_acc = 999
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0203/20210301.log')
+handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0301/20210301.log')
 fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
@@ -89,7 +89,7 @@ def main():
     testset = AgeDataset(csv_file='/content/dataset/valid.csv',transform=transform_test,root_dir='/content/dataset/valid')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
 #     model = BoneAge(1)
-    model = BoneAge_vit(num_classes=1)
+    model = BoneAge_vit(patch_size=16, num_classes=1, dim=1024, depth=24, heads=16, mlp_dim=4096)
     model.apply(weights_init)
     cudnn.benchmark = True
     print('   Total params: %.2fM'%(sum(p.numel() for p in model.parameters())/1000000.0))
