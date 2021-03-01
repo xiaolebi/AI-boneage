@@ -19,7 +19,7 @@ import torch.optim.lr_scheduler as lr_scheduler
 from torch.autograd import Variable
 from models import *
 from AgeDataset import *
-from models.BoneAgeNet import BoneAge
+from models.BoneAgeNet import BoneAge,BoneAge_vit
 from utils import AverageMeter,normalizedME,mkdir_p
 
 parser = argparse.ArgumentParser(description='PyTorch hand landmark training')
@@ -29,15 +29,15 @@ parser.add_argument('--epochs',default=120,type=int,metavar='N',help='number of 
 parser.add_argument('--start_epoch',default=0,type=int,metavar='N',help='manual epoch number (useful on restarts)')
 parser.add_argument('--train_batch',default=16,type=int,metavar='N',help='train batch size')
 parser.add_argument('--test_batch',default=3,type=int,metavar='N',help='test batch size')
-parser.add_argument('--lr','--learning-rate',default=0.000125,type=float,metavar='LR',help='initial learning rate') #0.000125
+parser.add_argument('--lr','--learning-rate',default=0.001,type=float,metavar='LR',help='initial learning rate') #0.000125
 parser.add_argument('--drop','--dropout',default=0,type=float,metavar='Dropout',help='Dropout ratio')
-parser.add_argument('--schedule',type=int,nargs='+',default=[4,8,16,32,64,100],help='Decrease learning rate at these epochs')
+parser.add_argument('--schedule',type=int,nargs='+',default=[5,10,20,30,50,70],help='Decrease learning rate at these epochs')
 parser.add_argument('--gamma',type=float,default=0.5,help='LR is multiplied by gamma on schedule')
 parser.add_argument('--momentum',default=0.9,type=float,metavar='M',help='momentum')
 parser.add_argument('--weight_decay','--wd',default=1e-4,type=float,metavar='W',help='weight decay (default: 1e-4)')
 parser.add_argument('--panelty','--pl',default=1e-4,type=float)
 parser.add_argument('--checkpoint',default='/content/checkpoints',type=str,metavar='PATH',help='path to save checkpoint(default:checkpoint)')
-parser.add_argument('--resume',default='/content/checkpoints/resume/model_best.pth.tar',type=str,metavar='PATH',help='path to latest checkpoint(default:None)')#/content/checkpoints/resume/Assess_BoneAge_InceptionV3_4.pth.tar
+parser.add_argument('--resume',default='',type=str,metavar='PATH',help='path to latest checkpoint(default:None)')#/content/checkpoints/resume/Assess_BoneAge_InceptionV3_4.pth.tar
 parser.add_argument('--depth',type=int,default=104,help='Model depth')
 parser.add_argument('--cardinality',type=int,default=8,help='Model cardinality(group)')
 parser.add_argument('--widen_factor',type=int,default=4,help='Widen factor 4 -> 64,8 -> 128')
@@ -60,7 +60,7 @@ if use_cuda:
 best_acc = 999
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0203/20210203_16batch.log')
+handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0203/20210301.log')
 fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
@@ -88,7 +88,8 @@ def main():
     trainloader = data.DataLoader(trainset,batch_size=args.train_batch,shuffle=True,num_workers=args.workers)
     testset = AgeDataset(csv_file='/content/dataset/valid.csv',transform=transform_test,root_dir='/content/dataset/valid')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
-    model = BoneAge(1)
+#     model = BoneAge(1)
+    model = BoneAge_vit(num_classes=1)
     model.apply(weights_init)
     cudnn.benchmark = True
     print('   Total params: %.2fM'%(sum(p.numel() for p in model.parameters())/1000000.0))
@@ -109,7 +110,8 @@ def main():
     optimizer = optim.Adam(params=params,lr=args.lr,weight_decay=args.weight_decay)
 #     scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
     
-    title = 'Assess_BoneAge_InceptionV3'
+#     title = 'Assess_BoneAge_InceptionV3'
+    title = 'Assess_BoneAge_ViT'
     if args.resume:
         print('==> Resume from checkpoint...')
         logging.info('==> Resume from checkpoint %s'%(args.resume))
@@ -163,7 +165,8 @@ def train(trainloader,model,criterion,optimizer,epoch,use_cuda):
         if use_cuda:
             inputs,targets,gender = inputs.cuda(),targets.cuda(),gender.cuda()
         inputs,targets,gender = torch.autograd.Variable(inputs),torch.autograd.Variable(targets),torch.autograd.Variable(gender)
-        outputs = model(inputs,gender)
+#         outputs = model(inputs,gender)
+        outputs = model(inputs)
         loss = criterion(outputs,targets)
         '''
         l2_reg = torch.autograd.Variable(torch.cuda.FloatTensor(1),requires_grad=True)
@@ -206,7 +209,8 @@ def test(testloader,model,criterion,epoch,use_cuda):
         if use_cuda:
             inputs, targets, gender = inputs.cuda(), targets.cuda(), gender.cuda()
         inputs, targets, gender = torch.autograd.Variable(inputs), torch.autograd.Variable(targets), torch.autograd.Variable(gender)
-        outputs = model(inputs,gender)
+#         outputs = model(inputs,gender)
+        outputs = model(inputs)
         loss = criterion(outputs,targets)
         losses.update(loss.item(),inputs.size(0))
         print("batch:{} test loss:{}".format(batch_idx,losses.avg))
@@ -225,7 +229,7 @@ def save_checkpoint(state,is_best,checkpoint='checkpoint',filename='checkpoint.p
     filepath = os.path.join(checkpoint,filename)
     torch.save(state,filepath)
     if is_best:
-        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0203",'model_best.pth.tar'))
+        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0301",'model_best.pth.tar'))
 
 def adjust_learning_rate(optimizer,epoch):
     global state
