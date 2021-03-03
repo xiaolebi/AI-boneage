@@ -29,12 +29,12 @@ parser.add_argument('--epochs',default=120,type=int,metavar='N',help='number of 
 parser.add_argument('--start_epoch',default=0,type=int,metavar='N',help='manual epoch number (useful on restarts)')
 parser.add_argument('--train_batch',default=16,type=int,metavar='N',help='train batch size')
 parser.add_argument('--test_batch',default=3,type=int,metavar='N',help='test batch size')
-parser.add_argument('--lr','--learning-rate',default=0.01,type=float,metavar='LR',help='initial learning rate') #0.000125
+parser.add_argument('--lr','--learning-rate',default=0.0001,type=float,metavar='LR',help='initial learning rate') #0.000125
 parser.add_argument('--drop','--dropout',default=0,type=float,metavar='Dropout',help='Dropout ratio')
-parser.add_argument('--schedule',type=int,nargs='+',default=[5,10,20,30,50,70],help='Decrease learning rate at these epochs')
+parser.add_argument('--schedule',type=int,nargs='+',default=[50],help='Decrease learning rate at these epochs')
 parser.add_argument('--gamma',type=float,default=0.5,help='LR is multiplied by gamma on schedule')
 parser.add_argument('--momentum',default=0.9,type=float,metavar='M',help='momentum')
-parser.add_argument('--weight_decay','--wd',default=0.1,type=float,metavar='W',help='weight decay (default: 1e-4)')
+parser.add_argument('--weight_decay','--wd',default=1e-4,type=float,metavar='W',help='weight decay (default: 1e-4)')
 parser.add_argument('--panelty','--pl',default=1e-4,type=float)
 parser.add_argument('--checkpoint',default='/content/checkpoints',type=str,metavar='PATH',help='path to save checkpoint(default:checkpoint)')
 parser.add_argument('--resume',default='',type=str,metavar='PATH',help='path to latest checkpoint(default:None)')#/content/checkpoints/resume/Assess_BoneAge_InceptionV3_4.pth.tar
@@ -60,7 +60,7 @@ if use_cuda:
 best_acc = 999
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0301/20210301.log')
+handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0303/20210303.log')
 fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
@@ -229,7 +229,7 @@ def save_checkpoint(state,is_best,checkpoint='checkpoint',filename='checkpoint.p
     filepath = os.path.join(checkpoint,filename)
     torch.save(state,filepath)
     if is_best:
-        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0301",'model_best.pth.tar'))
+        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0303",'model_best.pth.tar'))
 
 def adjust_learning_rate(optimizer,epoch):
     global state
