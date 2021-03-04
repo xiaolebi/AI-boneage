@@ -53,13 +53,22 @@ class BoneAge_VisionTransformer(nn.Module):
             pretrain_weight = np.load(weight)
             net.load_from(pretrain_weight)
         self.base_net = net
-        self.last_layer = nn.Linear(1000,1)
+        self.last_layer = nn.Linear(512,1)
+        self.gender_dense = nn.Linear(1,32)
+        self.fc1 = nn.Linear(1000 + 1*32,512)
         nn.init.xavier_uniform_(self.last_layer.weight)
         nn.init.normal_(self.last_layer.bias, std=1e-6)
+        nn.init.xavier_uniform_(self.lgender_dense.weight)
+        nn.init.normal_(self.gender_dense.bias, std=1e-6)
         
-    def forward(self, x):
+    def forward(self, x,gender_input):
         x = self.base_net(x)
-        last_output = self.last_layer(x[0])
+        gender_dense = self.gender_dense(gender_input)
+        x = torch.cat((x[0],gender_dense),dim=-1)
+        x = self.fc1(x)
+        x = F.elu(x)
+        x = F.dropout(x,p=0.5,training=self.training)
+        last_output = self.last_layer(x)
         return last_output
     
 class summary_model(nn.Module):
