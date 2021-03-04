@@ -178,8 +178,8 @@ def train(trainloader,model,criterion,optimizer,epoch,use_cuda):
         if use_cuda:
             inputs,targets,gender = inputs.cuda(),targets.cuda(),gender.cuda()
         inputs,targets,gender = torch.autograd.Variable(inputs),torch.autograd.Variable(targets),torch.autograd.Variable(gender)
-#         outputs = model(inputs,gender)
-        outputs = model(inputs)
+        outputs = model(inputs,gender)
+#         outputs = model(inputs)
 #         print(outputs.size(),targets.size())
 #         print(outputs,targets)
         loss = criterion(outputs,targets)
