@@ -59,7 +59,7 @@ class BoneAge_VisionTransformer(nn.Module):
         
     def forward(self, x):
         x = self.base_net(x)
-        print(shape(x))
+        print(x.shape)
         last_output = self.last_layer(x[0][0])
         return last_output
     
