@@ -224,6 +224,7 @@ def test(testloader,model,criterion,epoch,use_cuda):
         inputs, targets, gender = torch.autograd.Variable(inputs), torch.autograd.Variable(targets), torch.autograd.Variable(gender)
 #         outputs = model(inputs,gender)
         outputs = model(inputs)
+        print(outputs.size)
         loss = criterion(outputs,targets)
         losses.update(loss.item(),inputs.size(0))
         print("batch:{} test loss:{}".format(batch_idx,losses.avg))
