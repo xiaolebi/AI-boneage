@@ -120,11 +120,7 @@ def main():
     ]
     
     model = torch.nn.DataParallel(model).cuda()
-#     optimizer = optim.Adam(params=params,lr=args.lr,weight_decay=args.weight_decay)
-    optimizer = torch.optim.SGD(params=params,
-                                lr=args.lr,
-                                momentum=0.9,
-                                weight_decay=args.weight_decay)
+    optimizer = optim.Adam(params=params,lr=args.lr,weight_decay=args.weight_decay)
 #     scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
     
 #     title = 'Assess_BoneAge_InceptionV3'
