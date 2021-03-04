@@ -16,11 +16,11 @@ import torch.optim as optim
 import torch.utils.data as data
 import torchvision.transforms as transforms
 import torch.optim.lr_scheduler as lr_scheduler
+import models.VIT.configs as configs
 from torch.autograd import Variable
 from models import *
 from AgeDataset import *
 from models.BoneAgeNet import BoneAge,BoneAge_vit,BoneAge_VisionTransformer
-from models.VIT.modeling import CONFIGS
 from utils import AverageMeter,normalizedME,mkdir_p
 
 parser = argparse.ArgumentParser(description='PyTorch hand landmark training')
@@ -66,6 +66,16 @@ fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(lev
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
 logger.addHandler(handler)
+CONFIGS = {
+    'ViT-B_16': configs.get_b16_config(),
+    'ViT-B_32': configs.get_b32_config(),
+    'ViT-L_16': configs.get_l16_config(),
+    'ViT-L_32': configs.get_l32_config(),
+    'ViT-H_14': configs.get_h14_config(),
+    'R50-ViT-B_16': configs.get_r50_b16_config(),
+    'testing': configs.get_testing(),
+}
+
 
 def main():
     global best_acc
