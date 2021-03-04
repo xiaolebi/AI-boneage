@@ -101,8 +101,8 @@ def main():
     testset = AgeDataset(csv_file='/content/dataset/valid.csv',transform=transform_test,root_dir='/content/dataset/valid')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
 #     model = BoneAge(1)
-    model = BoneAge_vit(patch_size=32, num_classes=1, dim=768, depth=12, heads=12, mlp_dim=3072)
-#     model = BoneAge_VisionTransformer(CONFIGS['ViT-B_32'],pretrain=True,weight='/content/checkpoints/resume/imagenet21k+imagenet2012_ViT-B_32.npz')
+#     model = BoneAge_vit(patch_size=32, num_classes=1, dim=768, depth=12, heads=12, mlp_dim=3072)
+    model = BoneAge_VisionTransformer(CONFIGS['ViT-B_32'],pretrain=True,weight='/content/checkpoints/resume/imagenet21k+imagenet2012_ViT-B_32.npz')
 #     model.apply(weights_init)
     cudnn.benchmark = True
     print('   Total params: %.2fM'%(sum(p.numel() for p in model.parameters())/1000000.0))
