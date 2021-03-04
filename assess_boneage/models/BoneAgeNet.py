@@ -54,6 +54,8 @@ class BoneAge_VisionTransformer(nn.Module):
             net.load_from(pretrain_weight)
         self.base_net = net
         self.last_layer = nn.Linear(1000,1)
+        nn.init.xavier_uniform_(self.last_layer.weight)
+        nn.init.normal_(self.last_layer.bias, std=1e-6)
         
     def forward(self, x):
         x = self.base_net(x)
