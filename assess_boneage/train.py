@@ -19,7 +19,8 @@ import torch.optim.lr_scheduler as lr_scheduler
 from torch.autograd import Variable
 from models import *
 from AgeDataset import *
-from models.BoneAgeNet import BoneAge,BoneAge_vit
+from models.BoneAgeNet import BoneAge,BoneAge_vit，BoneAge_VisionTransformer
+from models.VIT.modeling import CONFIGS
 from utils import AverageMeter,normalizedME,mkdir_p
 
 parser = argparse.ArgumentParser(description='PyTorch hand landmark training')
@@ -29,7 +30,7 @@ parser.add_argument('--epochs',default=120,type=int,metavar='N',help='number of 
 parser.add_argument('--start_epoch',default=0,type=int,metavar='N',help='manual epoch number (useful on restarts)')
 parser.add_argument('--train_batch',default=16,type=int,metavar='N',help='train batch size')
 parser.add_argument('--test_batch',default=3,type=int,metavar='N',help='test batch size')
-parser.add_argument('--lr','--learning-rate',default=0.003,type=float,metavar='LR',help='initial learning rate') #0.000125
+parser.add_argument('--lr','--learning-rate',default=0.001,type=float,metavar='LR',help='initial learning rate') #0.000125
 parser.add_argument('--drop','--dropout',default=0,type=float,metavar='Dropout',help='Dropout ratio')
 parser.add_argument('--schedule',type=int,nargs='+',default=[50],help='Decrease learning rate at these epochs')
 parser.add_argument('--gamma',type=float,default=0.5,help='LR is multiplied by gamma on schedule')
@@ -60,7 +61,7 @@ if use_cuda:
 best_acc = 999
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0303/20210303.log')
+handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0304/20210304.log')
 fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
@@ -89,8 +90,9 @@ def main():
     testset = AgeDataset(csv_file='/content/dataset/valid.csv',transform=transform_test,root_dir='/content/dataset/valid')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
 #     model = BoneAge(1)
-    model = BoneAge_vit(patch_size=32, num_classes=1, dim=768, depth=12, heads=12, mlp_dim=3072)
-    model.apply(weights_init)
+#     model = BoneAge_vit(patch_size=32, num_classes=1, dim=768, depth=12, heads=12, mlp_dim=3072)
+    model = BoneAge_VisionTransformer(CONFIGS[''ViT-B_32''],pretrain=Ture,weight='/content/checkpoints/resume/imagenet21k+imagenet2012_ViT-B_32.npz')
+#     model.apply(weights_init)
     cudnn.benchmark = True
     print('   Total params: %.2fM'%(sum(p.numel() for p in model.parameters())/1000000.0))
     criterion = nn.SmoothL1Loss().cuda()
@@ -229,7 +231,7 @@ def save_checkpoint(state,is_best,checkpoint='checkpoint',filename='checkpoint.p
     filepath = os.path.join(checkpoint,filename)
     torch.save(state,filepath)
     if is_best:
-        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0303",'model_best.pth.tar'))
+        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0304",'model_best.pth.tar'))
 
 def adjust_learning_rate(optimizer,epoch):
     global state
