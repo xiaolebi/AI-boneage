@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from torchsummary import summary
 from .SE_inceptionv3 import SEInception_v3
 from .vit import ViT
+from .VIT.modeling import VisionTransformer
 
 class BoneAge(nn.Module):
     def __init__(self,num_class = 1):
@@ -41,6 +42,18 @@ class BoneAge_vit(nn.Module):
         # x = F.elu(x)
         # x = F.dropout(x,p=0.5,training=self.training)
         # last_output = self.last_layer(x)
+        return x
+    
+class BoneAge_VisionTransformer(nn.Module):
+    def __init__(self,config,img_size=512, num_classes=1000, zero_head=False, vis=False,pretrain=True,weight=None):
+        super(BoneAge_VisionTransformer, self).__init__()
+        net = VisionTransformer(config)
+        if pretrain:
+            pretrain_weight = np.load(weight)
+            net.load_from(pretrain_weight)
+        self.base_net = net
+    def forward(self, x):
+        x = self.base_net(x)
         return x
     
 class summary_model(nn.Module):
