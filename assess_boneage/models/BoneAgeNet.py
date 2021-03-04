@@ -52,10 +52,12 @@ class BoneAge_VisionTransformer(nn.Module):
         if pretrain:
             pretrain_weight = np.load(weight)
             net.load_from(pretrain_weight)
-        self.base_net = net
+        self.last_layer = nn.Linear(1000,1)
+        
     def forward(self, x):
         x = self.base_net(x)
-        return x
+        last_output = self.last_layer(x)
+        return last_output
     
 class summary_model(nn.Module):
     def __init__(self,num_class = 1):
