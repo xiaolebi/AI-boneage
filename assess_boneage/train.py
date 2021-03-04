@@ -184,7 +184,7 @@ def train(trainloader,model,criterion,optimizer,epoch,use_cuda):
         inputs,targets,gender = torch.autograd.Variable(inputs),torch.autograd.Variable(targets),torch.autograd.Variable(gender)
 #         outputs = model(inputs,gender)
         outputs = model(inputs)
-        print(outputs.size,targets.size)
+        print(outputs.size(),targets.size())
         loss = criterion(outputs,targets)
         '''
         l2_reg = torch.autograd.Variable(torch.cuda.FloatTensor(1),requires_grad=True)
