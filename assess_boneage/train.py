@@ -19,7 +19,7 @@ import torch.optim.lr_scheduler as lr_scheduler
 from torch.autograd import Variable
 from models import *
 from AgeDataset import *
-from models.BoneAgeNet import BoneAge,BoneAge_vit，BoneAge_VisionTransformer
+from models.BoneAgeNet import BoneAge,BoneAge_vit,BoneAge_VisionTransformer
 from models.VIT.modeling import CONFIGS
 from utils import AverageMeter,normalizedME,mkdir_p
 
