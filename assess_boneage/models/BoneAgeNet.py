@@ -31,18 +31,18 @@ class BoneAge_vit(nn.Module):
         super(BoneAge_vit,self).__init__()
         pretrain_net = ViT(image_size=image_size, patch_size=patch_size, num_classes=num_classes, dim=dim, depth=depth, heads=heads, mlp_dim=mlp_dim)
         self.base_net = pretrain_net
-        # self.gender_dense = nn.Linear(1,32)
-        # self.fc1 = nn.Linear(1024 + 1*32,512)
-        # self.last_layer = nn.Linear(512,num_class)
+        self.gender_dense = nn.Linear(1,32)
+        self.fc1 = nn.Linear(1024 + 1*32,512)
+        self.last_layer = nn.Linear(512,1)
 
     def forward(self,x):
         x = self.base_net(x)
-        # gender_dense = self.gender_dense(gender_input)
-        # x = torch.cat((x,gender_dense),dim=-1)
-        # x = self.fc1(x)
-        # x = F.elu(x)
-        # x = F.dropout(x,p=0.5,training=self.training)
-        # last_output = self.last_layer(x)
+        gender_dense = self.gender_dense(gender_input)
+        x = torch.cat((x,gender_dense),dim=-1)
+        x = self.fc1(x)
+        x = F.elu(x)
+        x = F.dropout(x,p=0.5,training=self.training)
+        last_output = self.last_layer(x)
         return x
     
 class BoneAge_VisionTransformer(nn.Module):
