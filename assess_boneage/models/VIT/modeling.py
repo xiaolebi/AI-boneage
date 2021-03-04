@@ -19,8 +19,6 @@ from torch.nn.modules.utils import _pair
 from scipy import ndimage
 
 
-
-from modeling_resnet import ResNetV2
 from torchsummary import summary
 
 
