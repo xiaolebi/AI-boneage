@@ -58,7 +58,7 @@ class BoneAge_VisionTransformer(nn.Module):
         self.fc1 = nn.Linear(1000 + 1*32,512)
         nn.init.xavier_uniform_(self.last_layer.weight)
         nn.init.normal_(self.last_layer.bias, std=1e-6)
-        nn.init.xavier_uniform_(self.lgender_dense.weight)
+        nn.init.xavier_uniform_(self.gender_dense.weight)
         nn.init.normal_(self.gender_dense.bias, std=1e-6)
         
     def forward(self, x,gender_input):
