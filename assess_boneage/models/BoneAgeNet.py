@@ -35,7 +35,7 @@ class BoneAge_vit(nn.Module):
         self.fc1 = nn.Linear(1024 + 1*32,512)
         self.last_layer = nn.Linear(512,1)
 
-    def forward(self,x):
+    def forward(self,x,gender_input):
         x = self.base_net(x)
         gender_dense = self.gender_dense(gender_input)
         x = torch.cat((x,gender_dense),dim=-1)
