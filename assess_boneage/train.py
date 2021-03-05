@@ -31,7 +31,7 @@ parser.add_argument('--epochs',default=120,type=int,metavar='N',help='number of 
 parser.add_argument('--start_epoch',default=0,type=int,metavar='N',help='manual epoch number (useful on restarts)')
 parser.add_argument('--train_batch',default=256,type=int,metavar='N',help='train batch size')
 parser.add_argument('--test_batch',default=32,type=int,metavar='N',help='test batch size')
-parser.add_argument('--lr','--learning-rate',default=0.1,type=float,metavar='LR',help='initial learning rate') #0.000125
+parser.add_argument('--lr','--learning-rate',default=0.01,type=float,metavar='LR',help='initial learning rate') #0.000125
 parser.add_argument('--drop','--dropout',default=0,type=float,metavar='Dropout',help='Dropout ratio')
 parser.add_argument('--schedule',type=int,nargs='+',default=[50],help='Decrease learning rate at these epochs')
 parser.add_argument('--gamma',type=float,default=0.5,help='LR is multiplied by gamma on schedule')
