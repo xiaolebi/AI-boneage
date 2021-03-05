@@ -25,11 +25,11 @@ class AgeDataset(Dataset):
         if image is not None:
             if self.rgb:
                 image = np.dot(image[...,:3],[0.299,0.587,0.114])
-            image = cv2.resize(image,(224,224))
+#             image = cv2.resize(image,(224,224))
             image = normalize(image,True,0.05)
         else:
-#             image = np.zeros((512,512))
-            image = np.zeros((224,224))
+            image = np.zeros((512,512))
+#             image = np.zeros((224,224))
         image[image > 4.5] = 4.5
         image = np.repeat(image[:,:,np.newaxis],3,axis=2)
         landmarks = self.landmarks_frame[idx][1]
