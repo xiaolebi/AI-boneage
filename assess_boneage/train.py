@@ -31,7 +31,7 @@ parser.add_argument('--epochs',default=120,type=int,metavar='N',help='number of 
 parser.add_argument('--start_epoch',default=0,type=int,metavar='N',help='manual epoch number (useful on restarts)')
 parser.add_argument('--train_batch',default=16,type=int,metavar='N',help='train batch size')
 parser.add_argument('--test_batch',default=4,type=int,metavar='N',help='test batch size')
-parser.add_argument('--lr','--learning-rate',default=0.01,type=float,metavar='LR',help='initial learning rate') #0.000125
+parser.add_argument('--lr','--learning-rate',default=0.001,type=float,metavar='LR',help='initial learning rate') #0.000125
 parser.add_argument('--drop','--dropout',default=0,type=float,metavar='Dropout',help='Dropout ratio')
 parser.add_argument('--schedule',type=int,nargs='+',default=[50],help='Decrease learning rate at these epochs')
 parser.add_argument('--gamma',type=float,default=0.5,help='LR is multiplied by gamma on schedule')
@@ -225,8 +225,8 @@ def test(testloader,model,criterion,epoch,use_cuda):
         if use_cuda:
             inputs, targets, gender = inputs.cuda(), targets.cuda(), gender.cuda()
         inputs, targets, gender = torch.autograd.Variable(inputs), torch.autograd.Variable(targets), torch.autograd.Variable(gender)
-#         outputs = model(inputs,gender)
-        outputs = model(inputs)
+        outputs = model(inputs,gender)
+#         outputs = model(inputs)
         loss = criterion(outputs,targets)
         losses.update(loss.item(),inputs.size(0))
         print("batch:{} test loss:{}".format(batch_idx,losses.avg))
