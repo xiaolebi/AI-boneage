@@ -62,7 +62,7 @@ if use_cuda:
 best_acc = 999
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0305/20210305_imgsize512.log')
+handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0305/20210305_inception_no_sex.log')
 fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
@@ -124,8 +124,8 @@ def main():
 #     optimizer = torch.optim.SGD(params=params,lr=args.lr,momentum=args.momentum,weight_decay=args.weight_decay)
 #     scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
     
-#     title = 'Assess_BoneAge_InceptionV3'
-    title = 'Assess_BoneAge_ViT'
+    title = 'Assess_BoneAge_InceptionV3_No_Sex'
+#     title = 'Assess_BoneAge_ViT'
     if args.resume:
         print('==> Resume from checkpoint...')
         logging.info('==> Resume from checkpoint %s'%(args.resume))
