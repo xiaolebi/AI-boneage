@@ -43,7 +43,7 @@ class BoneAge_vit(nn.Module):
         x = F.elu(x)
         x = F.dropout(x,p=0.5,training=self.training)
         last_output = self.last_layer(x)
-        return x
+        return last_output
     
 class BoneAge_VisionTransformer(nn.Module):
     def __init__(self,config,img_size=512, num_classes=1000, zero_head=False, vis=False,pretrain=True,weight=None):
