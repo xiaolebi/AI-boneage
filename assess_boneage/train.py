@@ -26,7 +26,7 @@ from utils import AverageMeter,normalizedME,mkdir_p
 
 parser = argparse.ArgumentParser(description='PyTorch hand landmark training')
 parser.add_argument('--dataset',default='BoneageAssessmentDataset')
-parser.add_argument('--workers',default=2,type=int,metavar='N',help='number of data loading workers (default:4)')
+parser.add_argument('--workers',default=4,type=int,metavar='N',help='number of data loading workers (default:4)')
 parser.add_argument('--epochs',default=120,type=int,metavar='N',help='number of total epochs to run')
 parser.add_argument('--start_epoch',default=0,type=int,metavar='N',help='manual epoch number (useful on restarts)')
 parser.add_argument('--train_batch',default=16,type=int,metavar='N',help='train batch size')
@@ -62,7 +62,7 @@ if use_cuda:
 best_acc = 999
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0304/20210304.log')
+handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0305/20210305_imgsize224.log')
 fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
@@ -85,14 +85,14 @@ def main():
         mkdir_p(args.checkpoint)
     print("==> Preparing dataset %s"%args.dataset)
     transform_train = transforms.Compose([
-        Rescale((520,520)),
-        RandomCrop((512,512)),
+        Rescale((230,230)),
+        RandomCrop((224,224)),
         # RandomFlip(),
         # RandomBrightness(),
         ToTensor(512)
     ])
     transform_test = transforms.Compose([
-        Rescale((512, 512)),
+        Rescale((224, 224)),
         ToTensor(512)
     ])
 
@@ -245,7 +245,7 @@ def save_checkpoint(state,is_best,checkpoint='checkpoint',filename='checkpoint.p
     filepath = os.path.join(checkpoint,filename)
     torch.save(state,filepath)
     if is_best:
-        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0304",'model_best.pth.tar'))
+        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0305",'model_best.pth.tar'))
 
 def adjust_learning_rate(optimizer,epoch):
     global state
