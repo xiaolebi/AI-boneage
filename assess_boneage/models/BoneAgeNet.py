@@ -48,7 +48,7 @@ class BoneAge_vit(nn.Module):
 class BoneAge_VisionTransformer(nn.Module):
     def __init__(self,config,img_size=512, num_classes=1000, zero_head=False, vis=False,pretrain=True,weight=None):
         super(BoneAge_VisionTransformer, self).__init__()
-        net = VisionTransformer(config)
+        net = VisionTransformer(config,img_size=img_size)
         if pretrain:
             pretrain_weight = np.load(weight)
             net.load_from(pretrain_weight)
