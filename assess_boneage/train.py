@@ -29,8 +29,8 @@ parser.add_argument('--dataset',default='BoneageAssessmentDataset')
 parser.add_argument('--workers',default=4,type=int,metavar='N',help='number of data loading workers (default:4)')
 parser.add_argument('--epochs',default=120,type=int,metavar='N',help='number of total epochs to run')
 parser.add_argument('--start_epoch',default=0,type=int,metavar='N',help='manual epoch number (useful on restarts)')
-parser.add_argument('--train_batch',default=128,type=int,metavar='N',help='train batch size')
-parser.add_argument('--test_batch',default=32,type=int,metavar='N',help='test batch size')
+parser.add_argument('--train_batch',default=16,type=int,metavar='N',help='train batch size')
+parser.add_argument('--test_batch',default=4,type=int,metavar='N',help='test batch size')
 parser.add_argument('--lr','--learning-rate',default=0.01,type=float,metavar='LR',help='initial learning rate') #0.000125
 parser.add_argument('--drop','--dropout',default=0,type=float,metavar='Dropout',help='Dropout ratio')
 parser.add_argument('--schedule',type=int,nargs='+',default=[50],help='Decrease learning rate at these epochs')
@@ -62,7 +62,7 @@ if use_cuda:
 best_acc = 999
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0305/20210305_imgsize224.log')
+handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0305/20210305_imgsize512.log')
 fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
@@ -85,14 +85,14 @@ def main():
         mkdir_p(args.checkpoint)
     print("==> Preparing dataset %s"%args.dataset)
     transform_train = transforms.Compose([
-        Rescale((230,230)),
-        RandomCrop((224,224)),
+        Rescale((520,520)),
+        RandomCrop((512,512)),
         # RandomFlip(),
         # RandomBrightness(),
         ToTensor(512)
     ])
     transform_test = transforms.Compose([
-        Rescale((224, 224)),
+        Rescale((512, 512)),
         ToTensor(512)
     ])
 
@@ -101,7 +101,7 @@ def main():
     testset = AgeDataset(csv_file='/content/dataset/valid.csv',transform=transform_test,root_dir='/content/dataset/valid')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
 #     model = BoneAge(1)
-    model = BoneAge_vit(image_size=224,patch_size=32, num_classes=1024, dim=768, depth=12, heads=12, mlp_dim=3072)
+    model = BoneAge_vit(image_size=512,patch_size=32, num_classes=1024, dim=768, depth=12, heads=12, mlp_dim=3072)
 #     model = BoneAge_VisionTransformer(CONFIGS['ViT-B_32'],img_size=224,pretrain=True,weight='/content/checkpoints/resume/imagenet21k+imagenet2012_ViT-B_32.npz')
 #     model.apply(weights_init)
     cudnn.benchmark = True
