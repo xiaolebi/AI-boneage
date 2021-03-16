@@ -62,7 +62,7 @@ if use_cuda:
 best_acc = 999
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0305/20210305_inception_no_sex.log')
+handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0305/20210316_with_PAM_PCM.log')
 fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
@@ -124,7 +124,7 @@ def main():
 #     optimizer = torch.optim.SGD(params=params,lr=args.lr,momentum=args.momentum,weight_decay=args.weight_decay)
 #     scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
     
-    title = 'Assess_BoneAge_InceptionV3_No_Sex'
+    title = 'Assess_BoneAge_InceptionV3'
 #     title = 'Assess_BoneAge_ViT'
     if args.resume:
         print('==> Resume from checkpoint...')
@@ -179,8 +179,8 @@ def train(trainloader,model,criterion,optimizer,epoch,use_cuda):
         if use_cuda:
             inputs,targets,gender = inputs.cuda(),targets.cuda(),gender.cuda()
         inputs,targets,gender = torch.autograd.Variable(inputs),torch.autograd.Variable(targets),torch.autograd.Variable(gender)
-#         outputs = model(inputs,gender)
-        outputs = model(inputs)
+        outputs = model(inputs,gender)
+#         outputs = model(inputs)
 #         print(outputs.size(),targets.size())
 #         print(outputs,targets)
         loss = criterion(outputs,targets)
@@ -225,8 +225,8 @@ def test(testloader,model,criterion,epoch,use_cuda):
         if use_cuda:
             inputs, targets, gender = inputs.cuda(), targets.cuda(), gender.cuda()
         inputs, targets, gender = torch.autograd.Variable(inputs), torch.autograd.Variable(targets), torch.autograd.Variable(gender)
-#         outputs = model(inputs,gender)
-        outputs = model(inputs)
+        outputs = model(inputs,gender)
+#         outputs = model(inputs)
         loss = criterion(outputs,targets)
         losses.update(loss.item(),inputs.size(0))
         print("batch:{} test loss:{}".format(batch_idx,losses.avg))
@@ -245,7 +245,7 @@ def save_checkpoint(state,is_best,checkpoint='checkpoint',filename='checkpoint.p
     filepath = os.path.join(checkpoint,filename)
     torch.save(state,filepath)
     if is_best:
-        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0305",'model_best.pth.tar'))
+        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0316",'model_best.pth.tar'))
 
 def adjust_learning_rate(optimizer,epoch):
     global state
