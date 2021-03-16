@@ -14,7 +14,7 @@ class BoneAge(nn.Module):
         self.base_net = pretrain_net
         self.gender_dense = nn.Linear(1,32)
         self.fc1 = nn.Linear(2048*4 + 1*32,1000)
-        self.last_layer = nn.Linear(2048*4,num_class)
+        self.last_layer = nn.Linear(1000,num_class)
 
     def forward(self,x,gender_input):
         x = self.base_net(x)
