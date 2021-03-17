@@ -6,6 +6,7 @@ from torchsummary import summary
 from .SE_inceptionv3 import SEInception_v3
 from .vit import ViT
 from .VIT.modeling import VisionTransformer
+from .InceptionV3 import Inception_V3
 
 class BoneAge(nn.Module):
     def __init__(self,num_class = 1):
@@ -26,6 +27,25 @@ class BoneAge(nn.Module):
         last_output = self.last_layer(x)
         return last_output
 
+class BoneAge_InceptionV3_NO_SE(nn.Module):
+    def __init__(self,num_class = 1):
+        super(BoneAge,self).__init__()
+        pretrain_net = Inception_v3()
+        self.base_net = pretrain_net
+        self.gender_dense = nn.Linear(1,32)
+        self.fc1 = nn.Linear(2048*4 + 1*32,1000)
+        self.last_layer = nn.Linear(1000,num_class)
+
+    def forward(self,x,gender_input):
+        x = self.base_net(x)
+        gender_dense = self.gender_dense(gender_input)
+        x = torch.cat((x,gender_dense),dim=-1)
+        x = self.fc1(x)
+        x = F.elu(x)
+        x = F.dropout(x,p=0.5,training=self.training)
+        last_output = self.last_layer(x)
+        return last_output
+    
 class BoneAge_vit(nn.Module):
     def __init__(self,image_size=512, patch_size=64, num_classes=1024, dim=128, depth=12, heads=8, mlp_dim=1000):
         super(BoneAge_vit,self).__init__()
