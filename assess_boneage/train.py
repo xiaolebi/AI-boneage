@@ -21,7 +21,7 @@ import models.VIT.configs as configs
 from torch.autograd import Variable
 from models import *
 from AgeDataset import *
-from models.BoneAgeNet import BoneAge,BoneAge_vit,BoneAge_VisionTransformer,BonAge_InceptionV3_NO_SE
+from models.BoneAgeNet import BoneAge,BoneAge_vit,BoneAge_VisionTransformer,BoneAge_InceptionV3_NO_SE
 from utils import AverageMeter,normalizedME,mkdir_p
 
 parser = argparse.ArgumentParser(description='PyTorch hand landmark training')
@@ -100,7 +100,7 @@ def main():
     trainloader = data.DataLoader(trainset,batch_size=args.train_batch,shuffle=True,num_workers=args.workers)
     testset = AgeDataset(csv_file='/content/dataset/valid.csv',transform=transform_test,root_dir='/content/dataset/valid')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
-    model = BonAge_InceptionV3_NO_SE(1)
+    model = BoneAge_InceptionV3_NO_SE(1)
 #     model = BoneAge_vit(image_size=512,patch_size=32, num_classes=1024, dim=1024, depth=24, heads=16, mlp_dim=4096)
 #     model = BoneAge_VisionTransformer(CONFIGS['ViT-B_32'],img_size=512,pretrain=True,weight='/content/checkpoints/resume/imagenet21k+imagenet2012_ViT-B_32.npz')
     model.apply(weights_init)
