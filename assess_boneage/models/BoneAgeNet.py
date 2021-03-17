@@ -29,7 +29,7 @@ class BoneAge(nn.Module):
 
 class BoneAge_InceptionV3_NO_SE(nn.Module):
     def __init__(self,num_class = 1):
-        super(BoneAge,self).__init__()
+        super(BoneAge_InceptionV3_NO_SE,self).__init__()
         pretrain_net = Inception_v3()
         self.base_net = pretrain_net
         self.gender_dense = nn.Linear(1,32)
