@@ -6,7 +6,7 @@ from torchsummary import summary
 from .SE_inceptionv3 import SEInception_v3
 from .vit import ViT
 from .VIT.modeling import VisionTransformer
-from .InceptionV3 import Inception_V3
+from .InceptionV3 import Inception_v3
 
 class BoneAge(nn.Module):
     def __init__(self,num_class = 1):
