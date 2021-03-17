@@ -21,7 +21,7 @@ import models.VIT.configs as configs
 from torch.autograd import Variable
 from models import *
 from AgeDataset import *
-from models.BoneAgeNet import BoneAge,BoneAge_vit,BoneAge_VisionTransformer,BoneAge_InceptionV3_NO_SE
+from models.BoneAgeNet import BoneAge,BoneAge_vit,BoneAge_VisionTransformer,BoneAge_InceptionV3_NO_SE,BoneAge_InceptionV3_SE_PAM
 from utils import AverageMeter,normalizedME,mkdir_p
 
 parser = argparse.ArgumentParser(description='PyTorch hand landmark training')
@@ -62,7 +62,7 @@ if use_cuda:
 best_acc = 999
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0317/20210317_NO_SE_AND_PAM_PCM.log')
+handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0317_SE_PAM/20210317_SE_AND_PAM_PCM.log')
 fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
@@ -100,7 +100,7 @@ def main():
     trainloader = data.DataLoader(trainset,batch_size=args.train_batch,shuffle=True,num_workers=args.workers)
     testset = AgeDataset(csv_file='/content/dataset/valid.csv',transform=transform_test,root_dir='/content/dataset/valid')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
-    model = BoneAge_InceptionV3_NO_SE(1)
+    model = BoneAge_InceptionV3_SE_PAM(1)
 #     model = BoneAge_vit(image_size=512,patch_size=32, num_classes=1024, dim=1024, depth=24, heads=16, mlp_dim=4096)
 #     model = BoneAge_VisionTransformer(CONFIGS['ViT-B_32'],img_size=512,pretrain=True,weight='/content/checkpoints/resume/imagenet21k+imagenet2012_ViT-B_32.npz')
     model.apply(weights_init)
@@ -245,7 +245,7 @@ def save_checkpoint(state,is_best,checkpoint='checkpoint',filename='checkpoint.p
     filepath = os.path.join(checkpoint,filename)
     torch.save(state,filepath)
     if is_best:
-        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0317",'model_best_NO_SE.pth.tar'))
+        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0317_SE_PAM",'model_best_NO_SE.pth.tar'))
 
 def adjust_learning_rate(optimizer,epoch):
     global state
