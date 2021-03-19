@@ -21,7 +21,7 @@ import models.VIT.configs as configs
 from torch.autograd import Variable
 from models import *
 from AgeDataset import *
-from models.BoneAgeNet import BoneAge,BoneAge_vit,BoneAge_VisionTransformer,BoneAge_InceptionV3_NO_SE,BoneAge_InceptionV3_SE_PAM
+from models.BoneAgeNet import BoneAge,BoneAge_vit,BoneAge_VisionTransformer,BoneAge_InceptionV3_NO_SE,BoneAge_InceptionV3_SE_PAM,BoneAge_InceptionV3_PAM
 from utils import AverageMeter,normalizedME,mkdir_p
 
 parser = argparse.ArgumentParser(description='PyTorch hand landmark training')
@@ -29,9 +29,9 @@ parser.add_argument('--dataset',default='BoneageAssessmentDataset')
 parser.add_argument('--workers',default=2,type=int,metavar='N',help='number of data loading workers (default:4)')
 parser.add_argument('--epochs',default=120,type=int,metavar='N',help='number of total epochs to run')
 parser.add_argument('--start_epoch',default=0,type=int,metavar='N',help='manual epoch number (useful on restarts)')
-parser.add_argument('--train_batch',default=12,type=int,metavar='N',help='train batch size')
+parser.add_argument('--train_batch',default=16,type=int,metavar='N',help='train batch size')
 parser.add_argument('--test_batch',default=4,type=int,metavar='N',help='test batch size')
-parser.add_argument('--lr','--learning-rate',default=0.0002500,type=float,metavar='LR',help='initial learning rate') #0.000125
+parser.add_argument('--lr','--learning-rate',default=0.001,type=float,metavar='LR',help='initial learning rate') #0.000125
 parser.add_argument('--drop','--dropout',default=0,type=float,metavar='Dropout',help='Dropout ratio')
 parser.add_argument('--schedule',type=int,nargs='+',default=[5,10,20,30,50],help='Decrease learning rate at these epochs')
 parser.add_argument('--gamma',type=float,default=0.5,help='LR is multiplied by gamma on schedule')
@@ -39,7 +39,7 @@ parser.add_argument('--momentum',default=0.9,type=float,metavar='M',help='moment
 parser.add_argument('--weight_decay','--wd',default=1e-4,type=float,metavar='W',help='weight decay (default: 1e-4)')
 parser.add_argument('--panelty','--pl',default=1e-4,type=float)
 parser.add_argument('--checkpoint',default='/content/checkpoints',type=str,metavar='PATH',help='path to save checkpoint(default:checkpoint)')
-parser.add_argument('--resume',default='/content/checkpoints/resume/model_best_SE_PAM.pth.tar',type=str,metavar='PATH',help='path to latest checkpoint(default:None)')#/content/checkpoints/resume/Assess_BoneAge_InceptionV3_4.pth.tar
+parser.add_argument('--resume',default='',type=str,metavar='PATH',help='path to latest checkpoint(default:None)')#/content/checkpoints/resume/Assess_BoneAge_InceptionV3_4.pth.tar
 parser.add_argument('--depth',type=int,default=104,help='Model depth')
 parser.add_argument('--cardinality',type=int,default=8,help='Model cardinality(group)')
 parser.add_argument('--widen_factor',type=int,default=4,help='Widen factor 4 -> 64,8 -> 128')
@@ -62,7 +62,7 @@ if use_cuda:
 best_acc = 999
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0317_SE_PAM/20210317_SE_AND_PAM_PCM.log')
+handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0319/20210319_PAM_PCM.log')
 fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
@@ -100,7 +100,8 @@ def main():
     trainloader = data.DataLoader(trainset,batch_size=args.train_batch,shuffle=True,num_workers=args.workers)
     testset = AgeDataset(csv_file='/content/dataset/valid.csv',transform=transform_test,root_dir='/content/dataset/valid')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
-    model = BoneAge_InceptionV3_SE_PAM(1)
+    model = BoneAge_InceptionV3_PAM(1)
+#    model = BoneAge_InceptionV3_SE_PAM(1)
 #    model = BoneAge_InceptionV3_NO_SE(1)
 #     model = BoneAge_vit(image_size=512,patch_size=32, num_classes=1024, dim=1024, depth=24, heads=16, mlp_dim=4096)
 #     model = BoneAge_VisionTransformer(CONFIGS['ViT-B_32'],img_size=512,pretrain=True,weight='/content/checkpoints/resume/imagenet21k+imagenet2012_ViT-B_32.npz')
@@ -246,7 +247,7 @@ def save_checkpoint(state,is_best,checkpoint='checkpoint',filename='checkpoint.p
     filepath = os.path.join(checkpoint,filename)
     torch.save(state,filepath)
     if is_best:
-        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0317",'model_best_SE_PAM.pth.tar'))
+        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0319",'model_best_PAM.pth.tar'))
 
 def adjust_learning_rate(optimizer,epoch):
     global state
