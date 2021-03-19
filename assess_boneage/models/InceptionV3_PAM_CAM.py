@@ -7,7 +7,7 @@ import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
 from .da_att import PAM_Module,CAM_Module
 
-__all__ = ['Inception3','Inception_v3_SE_PAM']
+__all__ = ['Inception3','Inception_v3_PAM']
 
 model_urls = {
     'inception_v3_google':'https://download.pytorch.org/models/inception_v3_google-1a9a5a14.pth'
@@ -17,7 +17,7 @@ model_urls = {
 '''
 This model is inceptionV3+SENet+PAM_Module/CAM_Module
 '''
-def Inception_v3_SE_PAM(pretrained=False,**kwargs):
+def Inception_v3_PAM(pretrained=False,**kwargs):
     if pretrained:
         if 'transform_input' not in kwargs:
             kwargs['transform_input'] = True
