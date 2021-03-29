@@ -135,9 +135,9 @@ class Inception3(nn.Module):
 #         x2 = self.CAM(x)
 #         x = x1 + x2
         
-        x = F.avg_pool2d(x,kernel_size=7)
+#         x = F.avg_pool2d(x,kernel_size=7)
 
-        x = x.view(x.size(0), -1)
+#         x = x.view(x.size(0), -1)
         return x
 
 
