@@ -101,7 +101,7 @@ def main():
     testset = AgeDataset(csv_file='/content/dataset/valid.csv',transform=transform_test,root_dir='/content/dataset/valid')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
 #     model = BoneAge_InceptionV3_PAM(1)
-    model = BoneAge_inception_vit(image_size=14, patch_size=2, num_classes=1024, dim=128, depth=12, heads=8, mlp_dim=1000,channels = 2048)
+    model = BoneAge_inception_vit(image_size=14, patch_size=2, num_classes=1, dim=128, depth=12, heads=8, mlp_dim=1000,channels = 2048)
 #    model = BoneAge_InceptionV3_SE_PAM(1)
 #    model = BoneAge_InceptionV3_NO_SE(1)
 #     model = BoneAge_vit(image_size=512,patch_size=32, num_classes=1024, dim=1024, depth=24, heads=16, mlp_dim=4096)
