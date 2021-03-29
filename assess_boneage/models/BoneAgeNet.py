@@ -90,7 +90,7 @@ class BoneAge_inception_vit(nn.Module):
     def __init__(self,image_size=14, patch_size=2, num_classes=1024, dim=128, depth=12, heads=8, mlp_dim=1000,channels = 2048):
         super(BoneAge_inception_vit,self).__init__()
         backbone = SEInception_v3()
-        pretrain_net = ViT(image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, channels)
+        pretrain_net = ViT(image_size=image_size, patch_size=patch_size, num_classes=num_classes, dim=dim, depth=depth, heads=heads, mlp_dim=mlp_dim, channels=channels)
         self.base_net = backbone
         self.next_net = pretrain_net
         self.gender_dense = nn.Linear(1,32)
