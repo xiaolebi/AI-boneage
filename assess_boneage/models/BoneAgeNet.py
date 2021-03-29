@@ -86,6 +86,28 @@ class BoneAge_InceptionV3_PAM(nn.Module):
         last_output = self.last_layer(x)
         return last_output
  
+class BoneAge_inception_vit(nn.Module):
+    def __init__(self,image_size=14, patch_size=2, num_classes=1024, dim=128, depth=12, heads=8, mlp_dim=1000,channels = 2048):
+        super(BoneAge_inception_vit,self).__init__()
+        backbone = SEInception_v3()
+        pretrain_net = ViT(image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, channels)
+        self.base_net = backbone
+        self.next_net = pretrain_net
+        self.gender_dense = nn.Linear(1,32)
+        self.fc1 = nn.Linear(1024 + 1*32,512)
+        self.last_layer = nn.Linear(512,1)
+
+    def forward(self,x,gender_input):
+        x = self.base_net(x)
+        x = self.next_net(x)
+        gender_dense = self.gender_dense(gender_input)
+        x = torch.cat((x,gender_dense),dim=-1)
+        x = self.fc1(x)
+        x = F.elu(x)
+        x = F.dropout(x,p=0.5,training=self.training)
+        last_output = self.last_layer(x)
+        return last_output
+
 class BoneAge_vit(nn.Module):
     def __init__(self,image_size=512, patch_size=64, num_classes=1024, dim=128, depth=12, heads=8, mlp_dim=1000):
         super(BoneAge_vit,self).__init__()
