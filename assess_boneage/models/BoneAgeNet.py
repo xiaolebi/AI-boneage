@@ -100,13 +100,13 @@ class BoneAge_inception_vit(nn.Module):
     def forward(self,x,gender_input):
         x = self.base_net(x)
         x = self.next_net(x)
-        gender_dense = self.gender_dense(gender_input)
-        x = torch.cat((x,gender_dense),dim=-1)
-        x = self.fc1(x)
-        x = F.elu(x)
-        x = F.dropout(x,p=0.5,training=self.training)
-        last_output = self.last_layer(x)
-        return last_output
+#         gender_dense = self.gender_dense(gender_input)
+#         x = torch.cat((x,gender_dense),dim=-1)
+#         x = self.fc1(x)
+#         x = F.elu(x)
+#         x = F.dropout(x,p=0.5,training=self.training)
+#         last_output = self.last_layer(x)
+        return x
 
 class BoneAge_vit(nn.Module):
     def __init__(self,image_size=512, patch_size=64, num_classes=1024, dim=128, depth=12, heads=8, mlp_dim=1000):
