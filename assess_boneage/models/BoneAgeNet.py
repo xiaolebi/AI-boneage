@@ -16,13 +16,13 @@ class BoneAge(nn.Module):
         pretrain_net = SEInception_v3()
         self.base_net = pretrain_net
         self.gender_dense = nn.Linear(1,32)
-        self.fc1 = nn.Linear(2048*4 + 1*32,1000)
+        self.fc1 = nn.Linear(2048*4 ,1000)
         self.last_layer = nn.Linear(1000,num_class)
 
-    def forward(self,x,gender_input):
+    def forward(self,x):
         x = self.base_net(x)
-        gender_dense = self.gender_dense(gender_input)
-        x = torch.cat((x,gender_dense),dim=-1)
+#         gender_dense = self.gender_dense(gender_input)
+#         x = torch.cat((x,gender_dense),dim=-1)
         x = self.fc1(x)
         x = F.elu(x)
         x = F.dropout(x,p=0.5,training=self.training)
