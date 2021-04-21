@@ -72,8 +72,8 @@ class Inception3(nn.Module):
             InceptionE(2048),
             SELayer(2048))
            
-#         self.PAM = PAM_Module(2048)
-#         self.CAM = CAM_Module(2048)
+        self.PAM = PAM_Module(2048)
+        self.CAM = CAM_Module(2048)
         
         self.fc = nn.Linear(2048,num_classes)
 
@@ -131,13 +131,13 @@ class Inception3(nn.Module):
         x = self.Mixed_7b(x)
         x = self.Mixed_7c(x)
         
-#         x1 = self.PAM(x)
-#         x2 = self.CAM(x)
-#         x = x1 + x2
+        x1 = self.PAM(x)
+        x2 = self.CAM(x)
+        x = x1 + x2
         
-#         x = F.avg_pool2d(x,kernel_size=7)
+        x = F.avg_pool2d(x,kernel_size=7)
 
-#         x = x.view(x.size(0), -1)
+        x = x.view(x.size(0), -1)
         return x
 
 
