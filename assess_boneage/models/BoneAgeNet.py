@@ -19,7 +19,7 @@ class BoneAge(nn.Module):
         self.fc1 = nn.Linear(2048*4+32 ,1000)
         self.last_layer = nn.Linear(1000,num_class)
 
-    def forward(self,x,gender):
+    def forward(self,x,gender_input):
         x = self.base_net(x)
         gender_dense = self.gender_dense(gender_input)
         x = torch.cat((x,gender_dense),dim=-1)
