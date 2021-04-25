@@ -96,9 +96,9 @@ def main():
         ToTensor(512)
     ])
 
-    trainset = AgeDataset(csv_file="/content/dataset/train.csv",transform=transform_train,root_dir='/content/dataset/train')
+    trainset = AgeDataset(csv_file="/content/dataset/train.csv",transform=transform_train,root_dir='/content/dataset/train_origin')
     trainloader = data.DataLoader(trainset,batch_size=args.train_batch,shuffle=True,num_workers=args.workers)
-    testset = AgeDataset(csv_file='/content/dataset/valid.csv',transform=transform_test,root_dir='/content/dataset/valid')
+    testset = AgeDataset(csv_file='/content/dataset/valid.csv',transform=transform_test,root_dir='/content/dataset/valid_origin')
     testloader = data.DataLoader(testset,batch_size=args.test_batch,shuffle=True,num_workers=args.workers)
     model = BoneAge(1)
 #     model = BoneAge_InceptionV3_PAM(1)
