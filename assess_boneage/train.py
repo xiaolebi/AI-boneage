@@ -62,7 +62,7 @@ if use_cuda:
 best_acc = 999
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0425/20210425_original_dataset_inception_SE_PAM_CAM.log')
+handler = logging.FileHandler('/content/drive/My Drive/assess_boneage/assess_boneage/0428/20210428_noadjust_dataset_inception_SE_PAM_CAM.log')
 fmt = logging.Formatter('[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
@@ -249,7 +249,7 @@ def save_checkpoint(state,is_best,checkpoint='checkpoint',filename='checkpoint.p
     filepath = os.path.join(checkpoint,filename)
     torch.save(state,filepath)
     if is_best:
-        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0425",'model_best_inception_SE_PAM_CAM.pth.tar'))
+        shutil.copyfile(filepath,os.path.join("/content/drive/My Drive/assess_boneage/assess_boneage/0428",'model_best_inception_SE_PAM_CAM.pth.tar'))
 
 def adjust_learning_rate(optimizer,epoch):
     global state
